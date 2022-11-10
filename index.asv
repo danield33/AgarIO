@@ -1,0 +1,68 @@
+figure
+close all
+
+% pos = [1 1 1 1];
+xlim([0 5])
+ylim([0 5])
+% xticklabels([])
+% yticklabels([])
+
+grid on
+axis equal
+
+% rectangle('Position',pos,'Curvature',[1 1])
+% rectangle('Position',[1 1 1 1],'Curvature',[1 1])
+
+% rectangle('Position',[2 9 1 1],'Curvature',[1 1])
+
+
+global a;
+a = Player(1, 1);
+
+set (gcf, 'WindowButtonMotionFcn', @mouseMove);
+
+while 1
+
+    start = a.location.getCenter();
+    dir = a.mouseLoc - start;
+    
+    dir = dir / norm(dir) / 10;
+
+    
+    a.move(dir);
+
+    
+    centerPoint = a.location.getCenter();
+    xlim([centerPoint(1)-3, centerPoint(1)+3]);
+    ylim([centerPoint(2)-3,centerPoint(2)+3]);
+
+    
+end
+
+
+
+function mouseMove (object, eventdata)
+    global a;
+    C = get (gca, 'CurrentPoint');
+   
+    X = (C(1,1));
+    Y = (C(1,2));
+    a.setMouseLoc([X, Y]);
+
+%     start = a.location.getCenter();
+%     dir = a.mouseLoc - start;
+%     dir = dir / norm(dir) / 10;
+% 
+%     
+%     a.move(dir);
+% 
+%     centerPoint = a.location.getCenter();
+%     xlim([centerPoint(1)-3, centerPoint(1)+3]);
+%     ylim([centerPoint(2)-3,centerPoint(2)+3]);
+end
+
+
+
+
+
+
