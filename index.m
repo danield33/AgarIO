@@ -5,23 +5,23 @@ close all
 grid on
 axis equal
 
-global a;
-a = Player(1, 1);
+global player;
+player = Player(1, 1);
 
 set (gcf, 'WindowButtonMotionFcn', @mouseMove);
 
 while 1
 
-    dir = a.mouseDir;
+    dir = player.mouseDir;
         
-    a.move(dir);
+    player.move(dir);
 
     
-    centerPoint = a.location.getCenter();
+    centerPoint = player.location.getCenter();
     xlim([centerPoint(1)-3, centerPoint(1)+3]);
     ylim([centerPoint(2)-3,centerPoint(2)+3]);
 
-    drawnow
+    drawnow %draw so that the loop doesn't prevent it from showing
 end
 
 
@@ -29,17 +29,17 @@ end
 %moves. This way the game loop can access the direction to move to
 
 function mouseMove (object, eventdata)
-    global a;
+    global player;
     C = get (gca, 'CurrentPoint');
    
     X = (C(1,1));
     Y = (C(1,2));
 
-    start = a.location.getCenter();
+    start = player.location.getCenter();
     dir = [X Y] - start;
     dir = dir / norm(dir) / 15;
     
-    a.setMouseDir(dir);
+    player.setMouseDir(dir);
 
 end
 

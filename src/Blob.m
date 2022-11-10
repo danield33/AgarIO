@@ -13,7 +13,7 @@ classdef Blob < handle
             this.location = Location(x, y, 1);
             this.mass = mass;
             this.rect = rectangle('Position', [x, y, this.location.w, this.location.w,]...
-                ,'Curvature',[1 1]);
+                ,'Curvature',[1 1], 'FaceColor', 'r');
 
         end
 
