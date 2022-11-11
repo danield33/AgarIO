@@ -38,14 +38,14 @@ while 1
 
     
     centerPoint = player.location.getCenter();
-    xlim([centerPoint(1)-windowSize - 5 / player.location.r, centerPoint(1)+windowSize + 5 / player.location.r]);
-    ylim([centerPoint(2)-windowSize - 5 / player.location.r, centerPoint(2)+windowSize + 5 / player.location.r]);
+    xlim([centerPoint(1)-windowSize - player.location.r, centerPoint(1)+windowSize + player.location.r]);
+    ylim([centerPoint(2)-windowSize - player.location.r, centerPoint(2)+windowSize + player.location.r]);
 
     for i = length(blobs):-1:1
         blob = blobs{i};
         if (~isempty(blob) && player.eats(blob))
 
-            player.grow(blob.location.r);
+            player.grow(blob.location.r*10);
             blob.kill();
             %replace food at random location
             blobs{i} = Blob(randi([-mapDim(1), mapDim(1)]), randi([-mapDim(2), mapDim(2)]), 1);
