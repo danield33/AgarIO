@@ -3,7 +3,7 @@ classdef Blob < handle
 
     properties
         location
-        mass
+        
         rect
     end
 
@@ -11,9 +11,8 @@ classdef Blob < handle
 
         function this = Blob(x, y, mass)
             this.location = Location(x, y, mass);
-            this.mass = mass;
-            this.rect = rectangle('Position', [x, y, this.location.w, this.location.w,]...
-                ,'Curvature',[1 1], 'FaceColor', [rand(1) rand(1) rand(1)]);
+            this.rect = rectangle('Position', [x, y, this.location.r, this.location.r,]...
+                ,'Curvature',[1, 1], 'FaceColor', [rand(1) rand(1) rand(1)]);
 
         end
 
@@ -23,17 +22,16 @@ classdef Blob < handle
             
         end
 
-        function obj = get.mass(this)
-            obj = this.mass;
-        end
 
         function grow(this, r)
-%             this.mass = this.mass + mass;
+%             this.mass = this.mass + mass; A = pi*r^2 => sqrt(A/pi) = r
             sum = pi * this.location.r * this.location.r + pi * r * r;
-            areaIncrease = sum / pi;
-            this.location.r = areaIncrease;
-            this.location.w = areaIncrease;
-            this.rect.Position(3:4) = [areaIncrease, areaIncrease];
+            newRadius = sqrt(sum / pi);
+%             this.location.r
+%             pi * this.location.r * this.location.r 
+            this.location.r = newRadius;
+            this.location.w = newRadius;
+            this.rect.Position(3:4) = [newRadius, newRadius];
 %             this.mass = this.mass + mass;
         end
 
@@ -45,13 +43,13 @@ classdef Blob < handle
 
             canEat = false;
             
-            if(this.mass > other.mass * 1.2)
+            if(this.location.r > other.location.r * 1.2)
                 loc = this.location.getCenter();
                 oloc = other.location.getCenter();
                 distance = sqrt((loc(1)-oloc(1))^2 + (loc(2)-oloc(2))^2);
                 %Check if the circles overlap at least half of each other
                 %to consume it
-                if(distance < this.location.r + other.location.r - other.location.r * 1.5)
+                if(distance < this.location.r/2)
                     canEat = true;
                 end
             end

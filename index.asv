@@ -29,7 +29,7 @@ player = Player(1, 1);
 
 set (gcf, 'WindowButtonMotionFcn', @mouseMove);
 
-windowSize = 30;
+windowSize = 10;
 while 1
 
     dir = player.mouseDir/5;
@@ -45,9 +45,9 @@ while 1
         blob = blobs{i};
         if (~isempty(blob) && player.eats(blob))
 
-            player
+            player.grow(blob.location.r);
             blob.kill();
-            blobs(i) = [];
+            blobs(i) = Blob();
 
         end
     end
