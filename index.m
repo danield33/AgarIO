@@ -37,7 +37,7 @@ while 1
     player.move(dir);
 
     
-    centerPoint = player.location.getCenter();
+    centerPoint = player.location.getCenter(); %TODO: lerp the zoom scaling
     xlim([centerPoint(1)-windowSize - player.location.r, centerPoint(1)+windowSize + player.location.r]);
     ylim([centerPoint(2)-windowSize - player.location.r, centerPoint(2)+windowSize + player.location.r]);
 
