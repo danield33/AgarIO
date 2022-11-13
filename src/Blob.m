@@ -24,17 +24,15 @@ classdef Blob < handle
 
 
         function grow(this, r)
-%             this.mass = this.mass + mass; A = pi*r^2 => sqrt(A/pi) = r
-            sum = pi * this.location.r * this.location.r + pi * r * r;
-            newRadius = sqrt(sum / pi);
-%             this.location.r
-%             pi * this.location.r * this.location.r 
+            totalArea = pi * this.location.r * this.location.r + pi * r * r;
+            newRadius = sqrt(totalArea / pi);
+
+%             lerp = linspace(this.location.r, newRadius, 10);
             this.location.r = newRadius;
             this.location.w = newRadius;
             this.rect.Position(3:4) = [newRadius, newRadius];
-%             this.mass = this.mass + mass;
+            
         end
-
         %Check if this blob eats the other blob. The other blob will not be removed
         %iff this.mass > other.mass*1.2 and this.location overlaps
         %other.location
@@ -46,7 +44,7 @@ classdef Blob < handle
             if(this.location.r > other.location.r * 1.2)
                 loc = this.location.getCenter();
                 oloc = other.location.getCenter();
-                distance = sqrt((loc(1)-oloc(1))^2 + (loc(2)-oloc(2))^2);
+                distance = sqrt(sum([(loc(1)-oloc(1))^2, (loc(2)-oloc(2))^2])); %faster than norm(oloc - loc)
                 %Check if the circles overlap at least half of each other
                 %to consume it
                 if(distance < this.location.r/2)

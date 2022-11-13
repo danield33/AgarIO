@@ -23,7 +23,7 @@ for i = 1:numFood
 end
 clear i;
 
-global player;
+global player; %declare global so that the mouseMove function has access to it
 player = Player(1, 1);
 
 
@@ -45,7 +45,7 @@ while 1
         blob = blobs{i};
         if (~isempty(blob) && player.eats(blob))
 
-            player.grow(blob.location.r*10);
+            player.grow(blob.location.r);
             blob.kill();
             %replace food at random location
             blobs{i} = Blob(randi([-mapDim(1), mapDim(1)]), randi([-mapDim(2), mapDim(2)]), 1);

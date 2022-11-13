@@ -17,7 +17,6 @@ classdef Location < handle
 
         function center = getCenter(this)
 %             this.pos + this.r
-this.r
             center = [(this.pos(1) + this.r + this.pos(1))/2, (this.pos(2) + this.r + this.pos(2))/2];
         end
 
