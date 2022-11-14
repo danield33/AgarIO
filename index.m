@@ -10,17 +10,9 @@ axis equal
 set(gcf,'position',[100,100,1000,1000])
 
 
-numFood = 150;
-blobs = cell(1, numFood);
+game = GameMap(150);
+game.populateFood();
 mapDim = GameMap.size;
-%%Setup Food Blobs
-
-for i = 1:numFood
-    randX = randi([-mapDim(1), mapDim(1)]);
-    randY = randi([-mapDim(2), mapDim(2)]);
-    blobs{i} = Blob(randX, randY, 1);
-end
-clear i;
 
 global player; %declare global so that the mouseMove function has access to it
 player = Player(1, 1);
@@ -40,14 +32,14 @@ while 1
     xlim([centerPoint(1)-windowSize - player.location.r, centerPoint(1)+windowSize + player.location.r]);
     ylim([centerPoint(2)-windowSize - player.location.r, centerPoint(2)+windowSize + player.location.r]);
 
-    for i = length(blobs):-1:1
-        blob = blobs{i};
+    for i = length(game.food):-1:1
+        blob = game.food{i};
         if (~isempty(blob) && player.eats(blob))
 
             player.grow(blob.location.r);
             blob.kill();
             %replace food at random location
-            blobs{i} = Blob(randi([-mapDim(1), mapDim(1)]), randi([-mapDim(2), mapDim(2)]), 1);
+            game.replaceFood(i);
 
         end
     end
