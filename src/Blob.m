@@ -3,7 +3,6 @@ classdef Blob < handle
 
     properties
         location
-        
         rect
     end
 
@@ -16,6 +15,14 @@ classdef Blob < handle
 
         end
 
+        function setRadius(this, newRadius)
+            this.location.r = newRadius;
+            this.location.w = newRadius*2;
+            this.rect.Position(3:4) = [newRadius, newRadius];
+        end
+
+        %Moves this in the vector direction of {@code dir} if this is
+        %inside of the map
         function move(this, dir)
             mapDim = GameMap.size;
             loc = this.rect.Position(1:2) + dir;
@@ -30,20 +37,20 @@ classdef Blob < handle
             end
             this.location.pos = loc;
 
-            
         end
 
 
+        %Grows the area of this by the area of r
         function grow(this, r)
             totalArea = pi * this.location.r * this.location.r + pi * r * r;
             newRadius = sqrt(totalArea / pi);
 
-%             lerp = linspace(this.location.r, newRadius, 10);
             this.location.r = newRadius;
             this.location.w = newRadius;
             this.rect.Position(3:4) = [newRadius, newRadius];
             
         end
+
         %Check if this blob eats the other blob. The other blob will not be removed
         %iff this.mass > other.mass*1.2 and this.location overlaps
         %other.location
