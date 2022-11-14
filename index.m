@@ -12,14 +12,13 @@ set(gcf,'position',[100,100,1000,1000])
 
 numFood = 150;
 blobs = cell(1, numFood);
-mapDim = [100, 100]; %width, height
-
+mapDim = GameMap.size;
 %%Setup Food Blobs
 
 for i = 1:numFood
     randX = randi([-mapDim(1), mapDim(1)]);
     randY = randi([-mapDim(2), mapDim(2)]);
-    blobs{end+1} = Blob(randX, randY, 1);
+    blobs{i} = Blob(randX, randY, 1);
 end
 clear i;
 
@@ -29,7 +28,7 @@ player = Player(1, 1);
 
 set (gcf, 'WindowButtonMotionFcn', @mouseMove);
 
-windowSize = 10;
+windowSize = 20;
 while 1
 
     dir = player.mouseDir/5;
@@ -60,7 +59,7 @@ end
 %With this event we want to set the players direction whenever the mouse
 %moves. This way the game loop can access the direction to move to
 
-function mouseMove (object, eventdata)
+function mouseMove (~, ~)
     global player;
     C = get (gca, 'CurrentPoint');
    
