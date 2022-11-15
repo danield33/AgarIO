@@ -16,10 +16,7 @@ classdef Blob < handle
 
         end
 
-        %Sets this velocity 
-        function addVelocity(this, newVelocity)
-            this.velocity = this.velocity + newVelocity;
-        end
+        function setVelocity(this,)
 
         function setRadius(this, newRadius)
             this.location.r = newRadius;
