@@ -52,9 +52,8 @@ classdef Player < handle
             end
         end
 
-        function move(this)
-            dir = this.mouseDir/5;
-            cellfun(@(c) c.addVelocity(dir), this.blobs, 'UniformOutput',false);
+        function move(this, dir)
+            cellfun(@(c) c.move(dir), this.blobs, 'UniformOutput',false);
         end
 
         %Gets the center coordinates of all blobs the player controls

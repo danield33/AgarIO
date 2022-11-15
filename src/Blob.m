@@ -2,9 +2,8 @@ classdef Blob < handle
 
 
     properties
-        location;
-        rect;
-        velocity = [0, 0];
+        location
+        rect
     end
 
     methods
@@ -16,11 +15,6 @@ classdef Blob < handle
 
         end
 
-        %Sets this velocity 
-        function addVelocity(this, newVelocity)
-            this.velocity = this.velocity + newVelocity;
-        end
-
         function setRadius(this, newRadius)
             this.location.r = newRadius;
             this.location.w = newRadius*2;
@@ -29,17 +23,17 @@ classdef Blob < handle
 
         %Moves this in the vector direction of {@code dir} if this is
         %inside of the map
-        function move(this)
+        function move(this, dir)
             mapDim = GameMap.size;
-            loc = this.rect.Position(1:2) + this.velocity;
+            loc = this.rect.Position(1:2) + dir;
             insideXBounds = loc(1) < mapDim(1) && loc(1) > -mapDim(1);
             insideYBounds = loc(2) < mapDim(2) && loc(2) > -mapDim(2);
             if(insideXBounds && insideYBounds)
                 this.rect.Position(1:2) = loc;
             elseif(insideXBounds)
-                this.rect.Position(1) = this.rect.Position(1) + this.velocity(1);
+                this.rect.Position(1) = this.rect.Position(1) + dir(1);
             elseif(insideYBounds)
-                this.rect.Position(2) = this.rect.Position(2) + this.velocity(2);
+                this.rect.Position(2) = this.rect.Position(2) + dir(2);
             end
             this.location.pos = loc;
 

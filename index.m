@@ -22,8 +22,11 @@ set (gcf, 'KeyPressFcn', @keyPressed);
 windowSize = 20;
 player.getCenter();
 while 1
+
+    dir = player.mouseDir/5; %Dir with speed so we slow it down by .2 just b/c
         
-    player.move();
+    player.move(dir);
+
     
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
     xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
