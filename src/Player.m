@@ -5,6 +5,9 @@ classdef Player < handle
         mouseDir = [0 0];
         blobs = cell(1);
     end
+    properties(Access=private)
+        center = [0, 0];
+    end
     
     methods
         function this = Player(x,y)
@@ -54,18 +57,28 @@ classdef Player < handle
         end
 
         function move(this, dir)
-            cellfun(@(c) c.move(dir), this.blobs, 'UniformOutput',false);
+            cen = this.getCenter();
+            if(~isnan(cen(1)))
+                cellfun(@(c) c.move(dir, cen), this.blobs, 'UniformOutput',false);
+            end
         end
 
         %Gets the center coordinates of all blobs the player controls
-        function center = getCenter(this)
+        function centerLoc = getCenter(this)
 
             
             xSum = sum(cell2mat(cellfun(@(c) c.location.pos(1), ...
                 this.blobs,'UniformOutput',false)));
-            ySum = sum(cell2mat(cellfun(@(c) c.location.pos(2), this.blobs,'UniformOutput',false)));
+            ySum = sum(cell2mat(cellfun(@(c) c.location.pos(2), this.blobs, ...
+                'UniformOutput',false)));
             len = length(this.blobs);
-            center = [xSum/len, ySum/len];
+% 
+%             xSum
+%             ySum
+%             len
+%             loc = [xSum/len, ySum/len]
+%             this.center = [xSum/len, ySum/len];
+            centerLoc = [xSum/len, ySum/len];
 
         end
 
