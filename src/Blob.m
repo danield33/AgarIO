@@ -34,6 +34,14 @@ classdef Blob < handle
 
         end
 
+        function processCenterPull(this, centerLoc)
+           v = centerLoc-this.location.pos;
+           vNorm = v / norm(v) / 10;
+           if(~isnan(vNorm))
+            this.addVelocity(vNorm);
+           end
+        end
+
     end
 
     methods
@@ -57,7 +65,7 @@ classdef Blob < handle
 
         %Moves this in the vector direction of {@code dir} if this is
         %inside of the map
-        function move(this, dir)
+        function move(this, dir, center)
             mapDim = GameMap.size;
             loc = this.rect.Position(1:2) + dir + this.velocity;
             insideXBounds = loc(1) < mapDim(1) && loc(1) > -mapDim(1);
@@ -70,8 +78,8 @@ classdef Blob < handle
                 this.rect.Position(2) = this.rect.Position(2) + dir(2) + this.velocity(2);
             end
             this.location.pos = loc;
-            this.processFriction();
-
+%             this.processFriction();
+            this.processCenterPull(center);
         end
 
 
