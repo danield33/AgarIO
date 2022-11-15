@@ -10,25 +10,20 @@ classdef Blob < handle
     methods(Access=private)
 
         function processFriction(this)
-            friction = 0.05;
+            friction = 0.01;
             xDir = this.velocity(1);
             yDir = this.velocity(2);
-
-            if(xDir > friction)
-                xDir = xDir - friction;
-            elseif(xDir < -friction)
-                xDir = xDir + friction;
-            else
-                xDir = 0;
+            if(xDir > 0)
+                xDir = xDir - min(friction, xDir);
+            elseif(xDir < 0)
+                xDir = xDir + max(friction, -xDir);
             end
             this.velocity(1) = xDir;
 
-            if(yDir > friction)
-                yDir = yDir - friction;
-            elseif(yDir < -friction)
-                yDir = yDir + friction;
-            else
-                yDir = 0;
+            if(yDir > 0)
+                yDir = yDir - min(friction, yDir);
+            if(yDir < 0)
+                yDir = yDir + max(friction, -yDir);
             end
             this.velocity(2) = yDir;
 
