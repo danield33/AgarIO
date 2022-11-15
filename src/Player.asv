@@ -17,7 +17,7 @@ classdef Player < handle
 
         function split(this)
 
-            dir = this.mouseDir;
+            dir = this.mouseDir*2;
             for i = 1:length(this.blobs)
                 blob = this.blobs{i};
                 pos = blob.location.pos;
@@ -27,7 +27,9 @@ classdef Player < handle
                 this.blobs{end+1} = newBlob;
                 blob.setRadius(newRad);
 
-                newBlob.addVelocity(dir);%Set velocity to fly away
+                newBlob.addVelocity(dir);
+
+                newBlob.move(this.mouseDir*5);
             end
 
         end

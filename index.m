@@ -25,15 +25,12 @@ while 1
 
     dir = player.mouseDir/5; %Dir with speed so we slow it down by .2 just b/c
         
+    player.move(dir);
 
     
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
-%     centerPoint
-%     if(~isnan(centerPoint(1)))
-        xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
-        ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
-%     end
-    player.move(dir);
+    xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
+    ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
 
     for i = length(game.food):-1:1
         blob = game.food{i};
