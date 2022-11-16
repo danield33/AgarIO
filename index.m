@@ -21,18 +21,17 @@ set (gcf, 'KeyPressFcn', @keyPressed);
 
 windowSize = 20;
 player.getCenter();
+%15 11 6 0
 while 1
 
-    dir = player.mouseDir/5; %Dir with speed so we slow it down by .2 just b/c
+    dir = player.mouseDir/3; %Dir with speed so we slow it down by .2 just b/c
         
 
     
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
-%     centerPoint
-%     if(~isnan(centerPoint(1)))
-        xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
-        ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
-%     end
+
+    xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
+    ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
     player.move(dir);
 
     for i = length(game.food):-1:1

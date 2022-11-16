@@ -14,7 +14,7 @@ classdef Player < handle
             %PLAYER Construct an instance of this class
             %   When a new player is made, they immediantly start out as a
             %   single blob
-            this.blobs{1} = Blob(x, y, 5);
+            this.blobs{1} = Blob(x, y, 5, this);
 
         end
 
@@ -30,7 +30,7 @@ classdef Player < handle
                 this.blobs{end+1} = newBlob;
                 blob.setRadius(newRad);
 
-                newBlob.addVelocity(dir);%Set velocity to fly away
+                newBlob.addVelocity(dir*2);%Set velocity to fly away
             end
 
         end
@@ -57,7 +57,7 @@ classdef Player < handle
         end
 
         function move(this, dir)
-            cen = this.getCenter();
+            cen = this.center;
             if(~isnan(cen(1)))
                 cellfun(@(c) c.move(dir, cen), this.blobs, 'UniformOutput',false);
             end
@@ -77,8 +77,8 @@ classdef Player < handle
 %             ySum
 %             len
 %             loc = [xSum/len, ySum/len]
-%             this.center = [xSum/len, ySum/len];
-            centerLoc = [xSum/len, ySum/len];
+            this.center = [xSum/len, ySum/len];
+            centerLoc = this.center;
 
         end
 
