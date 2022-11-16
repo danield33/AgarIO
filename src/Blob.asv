@@ -39,19 +39,17 @@ classdef Blob < handle
         end
 
         function processCenterPull(this, centerLoc)
-
-            v = centerLoc-this.location.pos;
-            vNorm = v / norm(v) / 20;
-            if(~isnan(vNorm))
+            
+               v = centerLoc-this.location.pos;
+               vNorm = v / norm(v) / 20;
+               if(~isnan(vNorm))
                 this.addVelocity(vNorm);%Add velocity in dir of center
-                if(~isempty(this.player))
-                    [isTouching, dist] = this.isTouchingAnother();
-                    if(isTouching)
-                        %                     ~isempty(this.player) && ~this.isTouchingAnother()
-                        this.addVelocity(-vNorm*(1/dist));
-                    end
+                [isTouching, dist] = this.isTouchingAnother();
+                if(~isempty(this.player) && isTouching)
+%                     ~isempty(this.player) && ~this.isTouchingAnother()
+                    this.addVelocity(-vNorm*dist);
                 end
-            end
+               end
         end
 
         function [touching, distance] = isTouchingAnother(this)
@@ -64,20 +62,20 @@ classdef Blob < handle
                     if(~strcmp(this.id, blob.id))
                         thisCenter = this.location.getCenter();
                         blobCenter = blob.location.getCenter();
-                        %                         e_distance(thisCenter, blobCenter)
-                        %                         ~isempty(blob)
+%                         e_distance(thisCenter, blobCenter)
+%                         ~isempty(blob)
                         dist = e_distance(thisCenter, blobCenter);
                         if(~isempty(blob) && dist <= this.location.r)
-                            %                         e_distance(thisCenter, blobCenter)
-                            %                         this.location.r
+%                         e_distance(thisCenter, blobCenter)
+%                         this.location.r
                             touching = true;
                             distance = dist;
-
-                            %                             vec = thisCenter - blobCenter;
-                            %                             if(sum(vec > 0) > 0)
-                            %                                 normVec = vec ./ norm(vec);
-                            %                                 blob.addVelocity(-this.velocity*2);
-                            %                             end
+                            
+%                             vec = thisCenter - blobCenter;
+%                             if(sum(vec > 0) > 0)
+%                                 normVec = vec ./ norm(vec);
+%                                 blob.addVelocity(-this.velocity*2);
+%                             end
 
                         end
                     end
@@ -118,13 +116,13 @@ classdef Blob < handle
         %inside of the map
         function move(this, dir, center)
             mapDim = GameMap.size;
-
-            %             if(~isempty(this.player))
-            %                 this.repelOthers();
-            %             end
-            %             if(~isempty(this.player) && ~this.isTouchingAnother())
-            %                 this.processCenterPull(center);
-            %             end
+            
+%             if(~isempty(this.player))
+%                 this.repelOthers();
+%             end
+%             if(~isempty(this.player) && ~this.isTouchingAnother())
+%                 this.processCenterPull(center);
+%             end
             this.processFriction();
 
             this.processCenterPull(center);
@@ -140,7 +138,7 @@ classdef Blob < handle
                 this.rect.Position(2) = this.rect.Position(2) + dir(2) + this.velocity(2);
             end
             this.location.pos = loc;
-
+            
 
         end
 
@@ -153,7 +151,7 @@ classdef Blob < handle
             this.location.r = newRadius;
             this.location.w = newRadius;
             this.rect.Position(3:4) = [newRadius, newRadius];
-
+            
         end
 
         %Check if this blob eats the other blob. The other blob will not be removed
@@ -163,7 +161,7 @@ classdef Blob < handle
         function canEat = eats(this, other)
 
             canEat = false;
-
+            
             if(this.location.r > other.location.r * 1.2)
                 loc = this.location.getCenter();
                 oloc = other.location.getCenter();
@@ -181,7 +179,7 @@ classdef Blob < handle
             delete(this.rect);
 
         end
-
+        
 
     end
 
