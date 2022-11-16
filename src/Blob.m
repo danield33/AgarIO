@@ -44,19 +44,15 @@ classdef Blob < handle
             vNorm = v / norm(v) / 20;
             if(~isnan(vNorm))
                 this.addVelocity(vNorm);%Add velocity in dir of center
-                if(~isempty(this.player))
-                    [isTouching, dist] = this.isTouchingAnother();
-                    if(isTouching)
-                        %                     ~isempty(this.player) && ~this.isTouchingAnother()
-                        this.addVelocity(-vNorm*(2/dist));
-                    end
-                end
             end
         end
 
-        function [touching, distance] = isTouchingAnother(this)
+        function [touching, otherIndex, distance] = isTouchingAnother(this)
+            %Determines if this is touching another player blob, which blob
+            %it is, and the distance between the two
             touching = false;
             distance = NaN;
+            otherIndex = 0;
             len = length(this.player.blobs);
             if(len > 1)
                 for i = 1:len
@@ -64,20 +60,12 @@ classdef Blob < handle
                     if(~strcmp(this.id, blob.id))
                         thisCenter = this.location.getCenter();
                         blobCenter = blob.location.getCenter();
-                        %                         e_distance(thisCenter, blobCenter)
-                        %                         ~isempty(blob)
                         dist = e_distance(thisCenter, blobCenter);
                         if(~isempty(blob) && dist <= this.location.r)
-                            %                         e_distance(thisCenter, blobCenter)
-                            %                         this.location.r
-                            touching = true;
-                            distance = dist;
 
-                            %                             vec = thisCenter - blobCenter;
-                            %                             if(sum(vec > 0) > 0)
-                            %                                 normVec = vec ./ norm(vec);
-                            %                                 blob.addVelocity(-this.velocity*2);
-                            %                             end
+                            touching = true;
+                            otherIndex = i;
+                            distance = dist;
 
                         end
                     end
@@ -117,16 +105,14 @@ classdef Blob < handle
         %Moves this in the vector direction of {@code dir} if this is
         %inside of the map
         function move(this, dir, center)
+
+%             if(isempty(this))
+%                 return;
+%             end
+
             mapDim = GameMap.size;
 
-            %             if(~isempty(this.player))
-            %                 this.repelOthers();
-            %             end
-            %             if(~isempty(this.player) && ~this.isTouchingAnother())
-            %                 this.processCenterPull(center);
-            %             end
             this.processFriction();
-
             this.processCenterPull(center);
 
             loc = this.rect.Position(1:2) + dir + this.velocity;
@@ -141,6 +127,16 @@ classdef Blob < handle
             end
             this.location.pos = loc;
 
+            if(~isempty(this.player))
+                [touching, otherIndex] = this.isTouchingAnother();
+                if(touching)
+                    otherBlob = this.player.blobs{otherIndex};
+                    this.grow(otherBlob.location.r);
+                    this.player.blobs(otherIndex) = [];
+                    otherBlob.kill();
+
+                end
+            end
 
         end
 
