@@ -5,6 +5,7 @@ classdef Blob < handle
         location
         rect
         velocity = [0, 0]
+        timeCreated;
     end
     properties(Access=private)
         player;
@@ -84,6 +85,7 @@ classdef Blob < handle
             mass = varargin{3};
             this.location = Location(x, y, mass);
             this.id = char(matlab.lang.internal.uuid());
+            this.timeCreated = java.lang.System.currentTimeMillis();
             this.rect = rectangle('Position', [x, y, this.location.r, this.location.r,]...
                 ,'Curvature',[1, 1], 'FaceColor', [rand(1) rand(1) rand(1)]);
             if(length(varargin) >= 4)
@@ -106,9 +108,9 @@ classdef Blob < handle
         %inside of the map
         function move(this, dir, center)
 
-%             if(isempty(this))
-%                 return;
-%             end
+            if(~isvalid(this.rect))
+                return
+            end
 
             mapDim = GameMap.size;
 
@@ -129,15 +131,22 @@ classdef Blob < handle
 
             if(~isempty(this.player))
                 [touching, otherIndex] = this.isTouchingAnother();
+               
                 if(touching)
                     otherBlob = this.player.blobs{otherIndex};
-                    this.grow(otherBlob.location.r);
-                    this.player.blobs(otherIndex) = [];
-                    otherBlob.kill();
+                    if(otherBlob.timeAlive() > 1000)
+                        this.grow(otherBlob.location.r);
+                        this.player.blobs(otherIndex) = [];
+                        otherBlob.kill();
+                    end
 
                 end
             end
 
+        end
+
+        function time = timeAlive(this)
+            time = java.lang.System.currentTimeMillis() - this.timeCreated;
         end
 
 
@@ -147,7 +156,7 @@ classdef Blob < handle
             newRadius = sqrt(totalArea / pi);
 
             this.location.r = newRadius;
-            this.location.w = newRadius;
+            this.location.w = newRadius*2;
             this.rect.Position(3:4) = [newRadius, newRadius];
 
         end

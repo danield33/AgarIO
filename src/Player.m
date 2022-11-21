@@ -24,11 +24,14 @@ classdef Player < handle
             for i = 1:length(this.blobs)
                 blob = this.blobs{i};
                 pos = blob.location.pos;
-                newRad =  blob.location.r/2;
-                newBlob = Blob(pos(1), pos(2), newRad*2);% times 2 b/c it's the width of the blob
+                blobRad = blob.location.r;
+                blobAreaHalf = pi * (blobRad * blobRad) / 2;
+                blobRadHalf = sqrt(blobAreaHalf / pi);
+                
+                newBlob = Blob(pos(1), pos(2), blobRadHalf * 2);% times 2 b/c it's the width of the blob
                 newBlob.rect.FaceColor = blob.rect.FaceColor;
                 this.blobs{end+1} = newBlob;
-                blob.setRadius(newRad);
+                blob.setRadius(blobRadHalf);
 
                 newBlob.addVelocity(dir*2);%Set velocity to fly away
             end
