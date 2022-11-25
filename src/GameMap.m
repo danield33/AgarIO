@@ -5,16 +5,19 @@ classdef GameMap < handle
     properties(Constant)
         size = [100, 100]; %from origin to negative and positive values of this
         numFood = 150;
+        numAI = 5;
     end
     properties
         food;%cell array
+        ai;
     end
     
     methods
-        function this = GameMap(foodCount)
+        function this = GameMap()
             %GAMEMAP Construct an instance of this class
             %   Detailed explanation goes here
-            this.food = cell(1, foodCount);
+            this.food = cell(1, this.numFood);
+            this.ai = cell(1, this.numAI);
         end
 
         function populateFood(this)
@@ -22,6 +25,12 @@ classdef GameMap < handle
                 randX = randi([-this.size(1), this.size(1)]);
                 randY = randi([-this.size(2), this.size(2)]);
                 this.food{i} = Blob(randX, randY, 1);
+            end
+        end
+
+        function populateAI(this)
+            for i = 1:length(this.ai)
+                this.ai{i} = AIPlayer();
             end
         end
 

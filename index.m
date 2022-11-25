@@ -5,11 +5,12 @@ clear
 grid on
 axis equal
 % set(gcf, 'Position', get(0, 'Screensize')); %full screen
-set(gcf,'position',[100,100,1000,1000])
+set(gcf,'position',[0,1000,1000,1000])
 
-
-game = GameMap(150);
+global game;
+game = GameMap();
 game.populateFood();
+game.populateAI();
 mapDim = GameMap.size;
 
 global player; %declare global so that the mouseMove event function has access to it
@@ -21,18 +22,22 @@ set (gcf, 'KeyPressFcn', @keyPressed);
 
 windowSize = 20;
 player.getCenter();
-%15 11 6 0
+
 while 1
 
-    dir = player.mouseDir/3; %Dir with speed so we slow it down by .2 just b/c
-        
-
+    dir = player.mouseDir/3; %Dir with speed so we slow it down by 3 just b/c
     
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
 
     xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
     ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
     player.move(dir);
+    for i = 1:length(game.ai)
+        ai = game.ai{i};
+        ai.move();
+    end
+
+    
 
     for i = length(game.food):-1:1
         blob = game.food{i};

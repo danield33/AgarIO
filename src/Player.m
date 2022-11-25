@@ -1,6 +1,6 @@
 classdef Player < handle
-    %PLAYER The player holds a collection of blobs that they control. 
-    
+    %PLAYER The player holds a collection of blobs that they control.
+
     properties
         mouseDir = [0 0];
         blobs = cell(1);
@@ -8,7 +8,7 @@ classdef Player < handle
     properties(Access=private)
         center = [0, 0];
     end
-    
+
     methods
         function this = Player(x,y)
             %PLAYER Construct an instance of this class
@@ -23,22 +23,24 @@ classdef Player < handle
             dir = this.mouseDir;
             for i = 1:length(this.blobs)
                 blob = this.blobs{i};
-                pos = blob.location.pos;
-                blobRad = blob.location.r;
-                blobAreaHalf = pi * (blobRad * blobRad) / 2;
-                blobRadHalf = sqrt(blobAreaHalf / pi);
-                
-                newBlob = Blob(pos(1), pos(2), blobRadHalf * 2);% times 2 b/c it's the width of the blob
-                newBlob.rect.FaceColor = blob.rect.FaceColor;
-                this.blobs{end+1} = newBlob;
-                blob.setRadius(blobRadHalf);
+                if(blob.location.r > 1)
+                    pos = blob.location.pos;
+                    blobRad = blob.location.r;
+                    blobAreaHalf = pi * (blobRad * blobRad) / 2;
+                    blobRadHalf = sqrt(blobAreaHalf / pi);
 
-                newBlob.addVelocity(dir*2);%Set velocity to fly away
+                    newBlob = Blob(pos(1), pos(2), blobRadHalf * 2);% times 2 b/c it's the width of the blob
+                    newBlob.rect.FaceColor = blob.rect.FaceColor;
+                    this.blobs{end+1} = newBlob;
+                    blob.setRadius(blobRadHalf);
+
+                    newBlob.addVelocity(dir*2);%Set velocity to fly away
+                end
             end
 
         end
 
-        %Grows a specific blob by {@code radius} 
+        %Grows a specific blob by {@code radius}
         function growBlob(this, radius, blobIndex)
             blob = this.blobs{blobIndex};
             blob.grow(radius);
@@ -49,7 +51,7 @@ classdef Player < handle
         function [canEat, index] = eats(this, other)
             canEat = false;
             index = 0;
-            for i = 1:length(this.blobs) 
+            for i = 1:length(this.blobs)
                 blob = this.blobs{i};
                 if(blob.eats(other))
                     canEat = true;
@@ -69,17 +71,13 @@ classdef Player < handle
         %Gets the center coordinates of all blobs the player controls
         function centerLoc = getCenter(this)
 
-            
+
             xSum = sum(cell2mat(cellfun(@(c) c.location.pos(1), ...
                 this.blobs,'UniformOutput',false)));
             ySum = sum(cell2mat(cellfun(@(c) c.location.pos(2), this.blobs, ...
                 'UniformOutput',false)));
             len = length(this.blobs);
-% 
-%             xSum
-%             ySum
-%             len
-%             loc = [xSum/len, ySum/len]
+
             this.center = [xSum/len, ySum/len];
             centerLoc = this.center;
 
@@ -88,7 +86,7 @@ classdef Player < handle
         function setMouseDir(this, vector)
             this.mouseDir = vector;
         end
-       
+
 
     end
 end
