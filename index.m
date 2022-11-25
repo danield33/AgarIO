@@ -13,14 +13,11 @@ game.populateFood();
 game.populateAI();
 mapDim = GameMap.size;
 
-global player; %declare global so that the mouseMove event function has access to it
-player = Player(1, 1);
-
-
 set (gcf, 'WindowButtonMotionFcn', @mouseMove);
 set (gcf, 'KeyPressFcn', @keyPressed);
 
 windowSize = 20;
+player = game.player;
 player.getCenter();
 
 while 1
@@ -34,6 +31,7 @@ while 1
     player.move(dir);
     for i = 1:length(game.ai)
         ai = game.ai{i};
+        ai.determineState(game);
         ai.move(game);
     end
 
@@ -58,7 +56,8 @@ end
 %moves. This way the game loop can access the direction to move to
 
 function mouseMove (~, ~)
-    global player;
+    global game;
+    player = game.player;
     C = get(gca, 'CurrentPoint');
    
     X = (C(1,1));
@@ -73,7 +72,8 @@ function mouseMove (~, ~)
 end
 
 function keyPressed(~, eventData)
-    global player;
+    global game;
+    player = game.player;
     char = eventData.Key;
     if(strcmp(char, 'space'))
         player.split();

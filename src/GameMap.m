@@ -10,6 +10,7 @@ classdef GameMap < handle
     properties
         food;%cell array
         ai;
+        player;
     end
 
     methods
@@ -17,7 +18,13 @@ classdef GameMap < handle
             %GAMEMAP Construct an instance of this class
             %   Detailed explanation goes here
             this.food = cell(1, this.numFood);
-            this.ai = cell(1, this.numAI);
+            
+            this.player = Player(1, 1);
+
+        end
+
+        function players =  getPlayers(this)
+            players = [this.ai(:)', {this.player}];
         end
 
         function populateFood(this)
@@ -29,8 +36,8 @@ classdef GameMap < handle
         end
 
         function populateAI(this)
-            for i = 1:length(this.ai)
-                this.ai{i} = AIPlayer();
+            for i = 1:this.numAI
+                this.ai{end+1} = AIPlayer();
             end
         end
 
