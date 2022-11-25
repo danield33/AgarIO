@@ -14,25 +14,32 @@ classdef AIPlayer < Player
 
         end
 
-        function move(this)
+        function move(this, game)
 
-            [dist, food] = this.getClosestFood();
+            [dist, food] = this.getClosestFood(game);
             cen = food.location.getCenter();
             pointVec = cen - this.getCenter();
             normVec = pointVec / norm(pointVec);
             move@Player(this, normVec/3);
-
+            
+            if(dist < 0.2)
+                [canEat, indx] = this.eats(food);
+                if(canEat)
+                    this.growBlob(food.location.r, indx);
+                    game.replaceFood(food);
+                end
+            end
 
         end
     end
 
     methods(Access=private)
 
-        function [dist, food] =  getClosestFood(this)
-            global game;
+        function [dist, food] =  getClosestFood(this, game)
             foods = game.food;
-            dist = game.size(1)*2;
+            dist = game.size(1)*2;%size of board
             food = foods{1};
+
             for i = 1:length(foods)
                 currFood = foods{i};
                 center = currFood.location.getCenter();

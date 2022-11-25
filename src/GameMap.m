@@ -1,17 +1,17 @@
 classdef GameMap < handle
     %GAMEMAP Summary of this class goes here
     %   Detailed explanation goes here
-    
+
     properties(Constant)
         size = [100, 100]; %from origin to negative and positive values of this
         numFood = 150;
-        numAI = 5;
+        numAI = 1;
     end
     properties
         food;%cell array
         ai;
     end
-    
+
     methods
         function this = GameMap()
             %GAMEMAP Construct an instance of this class
@@ -34,11 +34,14 @@ classdef GameMap < handle
             end
         end
 
-        function replaceFood(this, index)
-            this.food{index} = Blob(randi([-this.size(1), this.size(1)]), ...
-                randi([-this.size(2), this.size(2)]), 1);
+        function replaceFood(this, f)
+            newPos = [randi([-this.size(1), this.size(1)]),...
+                randi([-this.size(2), this.size(2)])];
+            f.location.pos = newPos;
+            f.rect.Position(1:2) = newPos;
+
         end
-        
+
 
     end
 end

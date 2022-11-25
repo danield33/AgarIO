@@ -34,20 +34,18 @@ while 1
     player.move(dir);
     for i = 1:length(game.ai)
         ai = game.ai{i};
-        ai.move();
+        ai.move(game);
     end
 
-    
 
     for i = length(game.food):-1:1
         blob = game.food{i};
         [canEat, indx] = player.eats(blob);
-        if (~isempty(blob) && canEat(1))
+        if (~isempty(blob) && canEat)
 
             player.growBlob(blob.location.r, indx);
-            blob.kill();
             %replace food at random location
-            game.replaceFood(i);
+            game.replaceFood(blob);
 
         end
     end
