@@ -10,7 +10,7 @@ classdef AIPlayer < Player
     methods
         function this = AIPlayer()
             %AICONTROLLER Construct an instance of this class
-            randLoc = [randi([-GameMap.size(1), GameMap.size(1)]), randi([-GameMap.size(2), GameMap.size(2)])];
+            randLoc = [randi([-GameMap.size(1)/5, GameMap.size(1)/5]), randi([-GameMap.size(2)/5, GameMap.size(2)/5])];
             %             this.player = Player(randLoc(1), randLoc(2));
             this@Player(randLoc(1), randLoc(2));
 

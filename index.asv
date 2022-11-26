@@ -20,14 +20,19 @@ windowSize = 20;
 player = game.player;
 player.getCenter();
 
-while 1
+function draw()
+global game;
+g
+while ~game.isOver
 
     dir = player.mouseDir/3; %Dir with speed so we slow it down by 3 just b/c
-    
+
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
 
-    xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
-    ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
+    if(~isnan(centerPoint(1)))
+        xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
+        ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
+    end
     player.move(dir);
     for i = 1:length(game.ai)
         ai = game.ai{i};
@@ -42,6 +47,7 @@ while 1
         if (~isempty(blob) && canEat)
 
             player.growBlob(blob.location.r, indx);
+            title("Mass: " + player.getTotalMass());
             %replace food at random location
             game.replaceFood(blob);
 
@@ -50,6 +56,7 @@ while 1
 
 
     players = game.getPlayers();
+
     for i = length(players):-1:1
         for j = length(players):-1:1
             p1 = players{i};
@@ -59,18 +66,19 @@ while 1
                     blob = p2.blobs{k};
                     [canEat, blobIndex] = p1.eats(blob);
                     if(canEat)
-                        p1.growBlob(blob.location.r, blobIndex);
                         if(p2 == game.player)
                             title("Game Over. Press space to restart");
                             game.isOver = true;
                         end
+                        p1.growBlob(blob.location.r, blobIndex);
+                        p2.blobs(k) = [];
                         blob.kill();
+                        break;
                     end
                 end
             end
         end
     end
-    title("Mass: " + player.getTotalMass());
 
     drawnow %draw so that the loop doesn't prevent it from showing
 end
@@ -79,34 +87,34 @@ end
 %With this event we want to set the players direction whenever the mouse
 %moves. This way the game loop can access the direction to move to
 
-function mouseMove (~, ~)
-    global game;
-    player = game.player;
-    C = get(gca, 'CurrentPoint');
-   
-    X = (C(1,1));
-    Y = (C(1,2));
+    function mouseMove (~, ~)
+        global game;
+        player = game.player;
+        C = get(gca, 'CurrentPoint');
 
-    start = player.getCenter();
-    dir = [X, Y] - start;%Figure out directional vector
-    dir = dir / norm(dir);
-    
-    player.setMouseDir(dir);
+        X = (C(1,1));
+        Y = (C(1,2));
 
+        start = player.getCenter();
+        dir = [X, Y] - start;%Figure out directional vector
+        dir = dir / norm(dir);
+
+        player.setMouseDir(dir);
+
+    end
 end
 
 function keyPressed(~, eventData)
-    global game;
-    player = game.player;
-    char = eventData.Key;
-    if(strcmp(char, 'space'))
-        if(~game.isOver)
-            player.split();
-        else
-            player.gameOver = false;
-            
-        end
+global game;
+player = game.player;
+char = eventData.Key;
+if(strcmp(char, 'space'))
+    if(~game.isOver)
+        player.split();
+    else
+        game.restart();
     end
+end
 end
 
 

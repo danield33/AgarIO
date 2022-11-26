@@ -11,19 +11,20 @@ global game;
 game = GameMap();
 game.populateFood();
 game.populateAI();
-mapDim = GameMap.size;
 
 set (gcf, 'WindowButtonMotionFcn', @mouseMove);
 set (gcf, 'KeyPressFcn', @keyPressed);
 
-windowSize = 20;
+draw(game);
+
+function draw(game)
 player = game.player;
-player.getCenter();
+windowSize = 20;
 
 while ~game.isOver
 
     dir = player.mouseDir/3; %Dir with speed so we slow it down by 3 just b/c
-    
+
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
 
     if(~isnan(centerPoint(1)))
@@ -80,7 +81,7 @@ while ~game.isOver
     drawnow %draw so that the loop doesn't prevent it from showing
 end
 
-
+end
 %With this event we want to set the players direction whenever the mouse
 %moves. This way the game loop can access the direction to move to
 
@@ -88,10 +89,10 @@ function mouseMove (~, ~)
     global game;
     player = game.player;
     C = get(gca, 'CurrentPoint');
-   
+    
     X = (C(1,1));
     Y = (C(1,2));
-
+    
     start = player.getCenter();
     dir = [X, Y] - start;%Figure out directional vector
     dir = dir / norm(dir);
@@ -108,8 +109,8 @@ function keyPressed(~, eventData)
         if(~game.isOver)
             player.split();
         else
-            game.isOver = false;
-            index
+            game.restart();
+            draw(game);
         end
     end
 end

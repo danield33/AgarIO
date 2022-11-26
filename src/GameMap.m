@@ -19,9 +19,17 @@ classdef GameMap < handle
             %GAMEMAP Construct an instance of this class
             %   Detailed explanation goes here
             this.food = cell(1, this.numFood);
-            
             this.player = Player(1, 1);
 
+        end
+
+        function restart(this)
+            this.food = cell(1, this.numFood);
+            this.ai = [];
+            this.player = Player(1, 1); 
+            this.populateFood();
+            this.populateAI();
+            this.isOver = false;
         end
 
         function players =  getPlayers(this)
