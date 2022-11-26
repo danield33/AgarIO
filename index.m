@@ -20,14 +20,16 @@ windowSize = 20;
 player = game.player;
 player.getCenter();
 
-while 1
+while ~game.isOver
 
     dir = player.mouseDir/3; %Dir with speed so we slow it down by 3 just b/c
     
     centerPoint = player.getCenter(); %TODO: get farthest blob from center of player view and add that to window size
 
-    xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
-    ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
+    if(~isnan(centerPoint(1)))
+        xlim([centerPoint(1)-windowSize , centerPoint(1)+windowSize ]);
+        ylim([centerPoint(2)-windowSize , centerPoint(2)+windowSize ]);
+    end
     player.move(dir);
     for i = 1:length(game.ai)
         ai = game.ai{i};
@@ -42,6 +44,7 @@ while 1
         if (~isempty(blob) && canEat)
 
             player.growBlob(blob.location.r, indx);
+            title("Mass: " + player.getTotalMass());
             %replace food at random location
             game.replaceFood(blob);
 
@@ -50,6 +53,7 @@ while 1
 
 
     players = game.getPlayers();
+
     for i = length(players):-1:1
         for j = length(players):-1:1
             p1 = players{i};
@@ -64,13 +68,14 @@ while 1
                             game.isOver = true;
                         end
                         p1.growBlob(blob.location.r, blobIndex);
+                        p2.blobs(k) = [];
                         blob.kill();
+                        break;
                     end
                 end
             end
         end
     end
-    title("Mass: " + player.getTotalMass());
 
     drawnow %draw so that the loop doesn't prevent it from showing
 end
