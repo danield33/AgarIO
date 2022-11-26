@@ -115,6 +115,7 @@ function keyPressed(~, eventData)
         end
     end
     if(strcmp(char, 'q'))
+        game.isOver = true;
         close all;
     end
 end
