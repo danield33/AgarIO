@@ -1,1 +1,0 @@
-            randLoc = [5 5];%[randi([-GameMap.size(1), GameMap.size(1)]), randi(-GameMap.size(2), GameMap.size(2))];
