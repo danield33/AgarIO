@@ -33,7 +33,7 @@ classdef AIPlayer < Player
 
             for i = 1:length(players)
                 player = players{i};
-                if(player ~= this)%check for same reference
+                if(player ~= this && ~isempty(player.blobs))%check for same reference
 
                     playerCen = player.getCenter();
                     thisCen = this.getCenter();

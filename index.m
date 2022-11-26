@@ -109,9 +109,13 @@ function keyPressed(~, eventData)
         if(~game.isOver)
             player.split();
         else
+            title("");
             game.restart();
             draw(game);
         end
+    end
+    if(strcmp(char, 'q'))
+        close all;
     end
 end
 

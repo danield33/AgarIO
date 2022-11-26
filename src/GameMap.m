@@ -24,6 +24,17 @@ classdef GameMap < handle
         end
 
         function restart(this)
+            for i = 1:length(this.food)
+                blob = this.food{i};
+                blob.kill();
+            end
+            for i = 1:length(this.ai)
+                ai = this.ai{i};
+                for j = 1:length(ai.blobs)
+                    blob = ai.blobs{j};
+                    blob.kill();
+                end
+            end
             this.food = cell(1, this.numFood);
             this.ai = [];
             this.player = Player(1, 1); 
