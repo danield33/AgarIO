@@ -18,6 +18,15 @@ classdef Player < handle
 
         end
 
+        function mass = getTotalMass(this)
+            tMass = 0;
+            for i = 1:length(this.blobs)
+                blob = this.blobs{i};
+                tMass = tMass + blob.location.r*blob.location.r*pi;
+            end
+            mass = tMass;
+        end
+
         function split(this)
 
             dir = this.mouseDir;

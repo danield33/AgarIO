@@ -59,11 +59,11 @@ while 1
                     blob = p2.blobs{k};
                     [canEat, blobIndex] = p1.eats(blob);
                     if(canEat)
+                        p1.growBlob(blob.location.r, blobIndex);
                         if(p2 == game.player)
                             title("Game Over. Press space to restart");
                             game.isOver = true;
                         end
-                        p1.growBlob(blob.location.r, blobIndex);
                         blob.kill();
                     end
                 end
@@ -103,8 +103,8 @@ function keyPressed(~, eventData)
         if(~game.isOver)
             player.split();
         else
-            game.isOver = false;
-            index
+            player.gameOver = false;
+            
         end
     end
 end

@@ -161,6 +161,7 @@ classdef Blob < handle
 
         end
 
+        %Checks if mass is able to eat larger sized mass
         function canEat = canEat(this, other)
             canEat = false;
             if(other.location.r * 1.2 < this.location.r)
@@ -191,7 +192,6 @@ classdef Blob < handle
 
         function kill(this)
             delete(this.rect);
-
         end
 
 

@@ -5,12 +5,13 @@ classdef GameMap < handle
     properties(Constant)
         size = [100, 100]; %from origin to negative and positive values of this
         numFood = 150;
-        numAI = 1;
+        numAI = 3;
     end
     properties
         food;%cell array
         ai;
         player;
+        isOver = false;
     end
 
     methods
