@@ -20,7 +20,7 @@ draw(game);
 function draw(game)
 player = game.player;
 windowSize = 20;
-xlabel("Press space to split and q to quit");
+xlabel("Press space to split and q to quit", "FontSize",35, "FontWeight","bold");
 
 while ~game.isOver
 
@@ -46,8 +46,8 @@ while ~game.isOver
         if (~isempty(blob) && canEat)
 
             player.growBlob(blob.location.r, indx);
-            title("Mass: " + player.getTotalMass());
-            %replace food at random location
+            title("Mass: " + round(player.getTotalMass(), 2), FontSize=35, FontWeight="bold");
+            %replaces food at random location
             game.replaceFood(blob);
 
         end
@@ -65,7 +65,7 @@ while ~game.isOver
                     [canEat, blobIndex] = p1.eats(blob);
                     if(canEat)
                         if(p2 == game.player && length(game.player.blobs) == 1)
-                            title("Game Over. Press space to restart");
+                            title("Game Over. Press space to restart", FontSize=35, FontWeight="bold");
                             game.isOver = true;
                         end
                         p1.growBlob(blob.location.r, blobIndex);

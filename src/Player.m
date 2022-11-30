@@ -7,6 +7,7 @@ classdef Player < handle
     end
     properties(Access=private)
         center = [0, 0];
+        lastSplit;
     end
 
     methods
@@ -15,6 +16,7 @@ classdef Player < handle
             %   When a new player is made, they immediantly start out as a
             %   single blob
             this.blobs{1} = Blob(x, y, 5, this);
+            this.lastSplit = java.lang.System.currentTimeMillis();
 
         end
 
@@ -29,22 +31,26 @@ classdef Player < handle
 
         function split(this)
 
-            dir = this.mouseDir;
-            for i = 1:length(this.blobs)
-                blob = this.blobs{i};
-                if(blob.location.r > 1)
-                    pos = blob.location.pos;
-                    blobRad = blob.location.r;
-                    blobAreaHalf = pi * (blobRad * blobRad) / 2;
-                    blobRadHalf = sqrt(blobAreaHalf / pi);
+            if(java.lang.System.currentTimeMillis() - this.lastSplit > 500)
 
-                    newBlob = Blob(pos(1), pos(2), blobRadHalf * 2);% times 2 b/c it's the width of the blob
-                    newBlob.rect.FaceColor = blob.rect.FaceColor;
-                    this.blobs{end+1} = newBlob;
-                    blob.setRadius(blobRadHalf);
+                dir = this.mouseDir;
+                for i = 1:length(this.blobs)
+                    blob = this.blobs{i};
+                    if(blob.location.r > 1)
+                        pos = blob.location.pos;
+                        blobRad = blob.location.r;
+                        blobAreaHalf = pi * (blobRad * blobRad) / 2;
+                        blobRadHalf = sqrt(blobAreaHalf / pi);
 
-                    newBlob.addVelocity(dir*2);%Set velocity to fly away
+                        newBlob = Blob(pos(1), pos(2), blobRadHalf * 2);% times 2 b/c it's the width of the blob
+                        newBlob.rect.FaceColor = blob.rect.FaceColor;
+                        this.blobs{end+1} = newBlob;
+                        blob.setRadius(blobRadHalf);
+
+                        newBlob.addVelocity(dir*2);%Set velocity to fly away
+                    end
                 end
+                this.lastSplit = java.lang.System.currentTimeMillis();
             end
 
         end
