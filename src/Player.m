@@ -58,7 +58,7 @@ classdef Player < handle
                         newBlob.addVelocity(dir*2);%Set velocity to fly away
                     end
                 end
-                this.playPopSound();
+                this.playPopSound()
                 this.lastSplit = java.lang.System.currentTimeMillis();
             end
 
