@@ -20,6 +20,7 @@ draw(game);
 function draw(game)
 player = game.player;
 windowSize = 20;
+xlabel("Press space to split and q to quit");
 
 while ~game.isOver
 
@@ -52,10 +53,9 @@ while ~game.isOver
         end
     end
 
-
     players = game.getPlayers();
 
-    for i = length(players):-1:1
+    for i = length(players):-1:1%move backwards because we're removing stuff from the array
         for j = length(players):-1:1
             p1 = players{i};
             p2 = players{j};
@@ -64,7 +64,7 @@ while ~game.isOver
                     blob = p2.blobs{k};
                     [canEat, blobIndex] = p1.eats(blob);
                     if(canEat)
-                        if(p2 == game.player)
+                        if(p2 == game.player && length(game.player.blobs) == 1)
                             title("Game Over. Press space to restart");
                             game.isOver = true;
                         end
@@ -86,38 +86,38 @@ end
 %moves. This way the game loop can access the direction to move to
 
 function mouseMove (~, ~)
-    global game;
-    player = game.player;
-    C = get(gca, 'CurrentPoint');
-    
-    X = (C(1,1));
-    Y = (C(1,2));
-    
-    start = player.getCenter();
-    dir = [X, Y] - start;%Figure out directional vector
-    dir = dir / norm(dir);
-    
-    player.setMouseDir(dir);
+global game;
+player = game.player;
+C = get(gca, 'CurrentPoint');
+
+X = (C(1,1));
+Y = (C(1,2));
+
+start = player.getCenter();
+dir = [X, Y] - start;%Figure out directional vector
+dir = dir / norm(dir);
+
+player.setMouseDir(dir);
 
 end
 
 function keyPressed(~, eventData)
-    global game;
-    player = game.player;
-    char = eventData.Key;
-    if(strcmp(char, 'space'))
-        if(~game.isOver)
-            player.split();
-        else
-            title("");
-            game.restart();
-            draw(game);
-        end
+global game;
+player = game.player;
+char = eventData.Key;
+if(strcmp(char, 'space'))
+    if(~game.isOver)
+        player.split();
+    else
+        title("");
+        game.restart();
+        draw(game);
     end
-    if(strcmp(char, 'q'))
-        game.isOver = true;
-        close all;
-    end
+end
+if(strcmp(char, 'q'))
+    game.isOver = true;
+    close all;
+end
 end
 
 

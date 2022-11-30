@@ -30,19 +30,21 @@ classdef AIPlayer < Player
         function determineState(this, game)
             players = game.getPlayers();
 
-            for i = 1:length(players)
-                player = players{i};
-                if(player ~= this && ~isempty(player.blobs))%check for same reference
+            if(~isempty(this.blobs))
+                for i = 1:length(players)
+                    player = players{i};
+                    if(player ~= this && ~isempty(player.blobs))%check for same reference
 
-                    playerCen = player.getCenter();
-                    thisCen = this.getCenter();
-                    canEat = this.blobs{1}.canEat(player.blobs{1});
-                    if(canEat)
-                        dist = e_distance(playerCen, thisCen);
-                        if(dist < 20)
-                            this.state = AIStates.CHASING;
-                            this.target = player;
-                            return;
+                        playerCen = player.getCenter();
+                        thisCen = this.getCenter();
+                        canEat = this.blobs{1}.canEat(player.blobs{1});
+                        if(canEat)
+                            dist = e_distance(playerCen, thisCen);
+                            if(dist < 20)
+                                this.state = AIStates.CHASING;
+                                this.target = player;
+                                return;
+                            end
                         end
                     end
                 end
