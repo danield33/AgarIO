@@ -17,11 +17,16 @@ set (gcf, 'KeyPressFcn', @keyPressed);
 
 draw(game);
 
+
+
 function draw(game)
 player = game.player;
 windowSize = 20;
+[y, fS] = audioread("./sounds/GameMusic.mp3");
+audioPlayer = audioplayer(y, fS);
 xlabel("Press space to split and q to quit", "FontSize",35, "FontWeight","bold");
 
+playblocking(audioPlayer);
 while ~game.isOver
 
     dir = player.mouseDir/3; %Dir with speed so we slow it down by 3 just b/c

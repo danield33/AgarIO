@@ -10,6 +10,14 @@ classdef Player < handle
         lastSplit;
     end
 
+    methods(Static, Access=private)
+        function playPopSound()
+            [y, fS] = audioread("./sounds/splitPop");
+            audioPlayer = audioplayer(y, fS);
+            play(audioPlayer);
+        end
+    end
+
     methods
         function this = Player(x,y)
             %PLAYER Construct an instance of this class
@@ -50,6 +58,7 @@ classdef Player < handle
                         newBlob.addVelocity(dir*2);%Set velocity to fly away
                     end
                 end
+                this.playPopSound();
                 this.lastSplit = java.lang.System.currentTimeMillis();
             end
 
@@ -101,7 +110,6 @@ classdef Player < handle
         function setMouseDir(this, vector)
             this.mouseDir = vector;
         end
-
 
     end
 end
